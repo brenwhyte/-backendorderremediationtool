@@ -242,6 +242,120 @@ spec:
           security:
             - auth0: []
             - JWT: []
+      /resubmit/initiate:
+        post:
+          tags:
+            - resubmission-controller
+          summary: Creates a transaction and fetches order data for requested orders, if they exist.
+          operationId: initiateResubmitUsingPOST
+          consumes:
+            - application/json
+          produces:
+            - '*/*'
+          parameters:
+            - in: body
+              name: resubmission
+              description: resubmission
+              required: true
+              schema:
+                type: array
+                items:
+                  $ref: '#/definitions/ResubmitRequest'
+          responses:
+            '200':
+              description: OK
+              schema:
+                $ref: '#/definitions/OrderResubmissionResult'
+          security:
+            - auth0: []
+            - JWT: []
+      /resubmit/remediationHistory:
+        get:
+          tags:
+            - resubmission-controller
+          summary: Fetch all transactions associated with a given canonicalId
+          operationId: getRemediationHistoryUsingGET
+          produces:
+            - '*/*'
+          responses:
+            '200':
+              description: OK
+              schema:
+                type: array
+                items:
+                  $ref: '#/definitions/Transaction'
+          security:
+            - auth0: []
+            - JWT: []
+      /resubmit/{transactionId}:
+        get:
+          tags:
+            - resubmission-controller
+          summary: Fetch previously submitted transaction details
+          operationId: getTransactionDataUsingGET
+          produces:
+            - '*/*'
+          parameters:
+            - name: transactionId
+              in: path
+              description: The transaction
+              required: true
+              type: string
+          responses:
+            '200':
+              description: OK
+              schema:
+                $ref: '#/definitions/OrderResubmissionResult'
+          security:
+            - auth0: []
+            - JWT: []
+        post:
+          tags:
+            - resubmission-controller
+          summary: Perform the resubmissions for previously initialized transaction.  This action will only be performed on orders that had resubmittableOrder=true
+          operationId: resubmitUsingPOST
+          consumes:
+            - application/json
+          produces:
+            - '*/*'
+          parameters:
+            - name: transactionId
+              in: path
+              description: The transaction
+              required: true
+              type: string
+          responses:
+            '200':
+              description: OK
+              schema:
+                $ref: '#/definitions/OrderResubmissionResult'
+          security:
+            - auth0: []
+            - JWT: []
+      /resubmit/{transactionId}/refresh:
+        post:
+          tags:
+            - resubmission-controller
+          summary: Refresh the order data for the previously submitted transaction.  Refreshed data will be persisted.
+          operationId: refreshUsingPOST
+          consumes:
+            - application/json
+          produces:
+            - '*/*'
+          parameters:
+            - name: transactionId
+              in: path
+              description: The transaction
+              required: true
+              type: string
+          responses:
+            '200':
+              description: OK
+              schema:
+                $ref: '#/definitions/OrderResubmissionResult'
+          security:
+            - auth0: []
+            - JWT: []
     securityDefinitions:
       JWT:
         type: apiKey
