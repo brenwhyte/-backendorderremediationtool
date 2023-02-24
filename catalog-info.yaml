@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: BORT
+  name: BORT-temp
   description: Backend Order Remediation Tool
   annotations:
     category: order-remediation
@@ -16,7 +16,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: orderJourney
+  name: orderJourney-temp
   description: Order Journey endpoints
   tags:
     - bort
