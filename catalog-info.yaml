@@ -16,39 +16,141 @@ spec:
   lifecycle: staging
   owner: LochNess
   definition: |
-swagger: '2.0'
-info:
-  description: Backend service for SORT UI
-  version: '1.0'
-  title: Backend Order Remediation Tool (BORT!)
-  termsOfService: Tier 1
-  contact:
-    name: Order Management Tribe
-    url: https://vistaprint.atlassian.net/wiki/spaces/OMT/overview
-    email: lochnesssquad@vistaprint.com
-host: bort.eu-west-1-hippogriff-staging.orders.vpsvc.com
-basePath: /
-tags:
-  - name: order-journey-controller
-    description: Order Journey Controller
-  - name: resubmission-controller
-    description: Resubmission Controller
-paths:
-  /journey/milestoneTypes:
-    get:
-      tags:
-        - order-journey-controller
-      summary: Fetch all supported order milestones
-      operationId: getMilestoneTypesUsingGET
-      produces:
-        - '*/*'
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              type: string
+    swagger: '2.0'
+    info:
+      description: Backend service for SORT UI
+      version: '1.0'
+      title: Backend Order Remediation Tool (BORT!)
+      termsOfService: Tier 1
+      contact:
+        name: Order Management Tribe
+        url: https://vistaprint.atlassian.net/wiki/spaces/OMT/overview
+        email: lochnesssquad@vistaprint.com
+    host: bort.eu-west-1-hippogriff-staging.orders.vpsvc.com
+    basePath: /
+    tags:
+      - name: order-journey-controller
+        description: Order Journey Controller
+      - name: resubmission-controller
+        description: Resubmission Controller
+    paths:
+      /journey/milestoneTypes:
+        get:
+          tags:
+            - order-journey-controller
+          summary: Fetch all supported order milestones
+          operationId: getMilestoneTypesUsingGET
+          produces:
+            - '*/*'
+          responses:
+            '200':
+              description: OK
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum:
+                    - ADDRESS_UPDATE
+                    - BILLING_ADDRESS_UPDATE
+                    - DESIGN_DATA_UPDATE
+                    - EMAIL_GENERIC
+                    - EMAIL_ORDER_AWAITING_PAYMENT
+                    - EMAIL_ORDER_CANCELED
+                    - EMAIL_ORDER_CANCEL_FAILED
+                    - EMAIL_ORDER_CANCEL_REQUESTED
+                    - EMAIL_ORDER_CONFIRMATION
+                    - EMAIL_ORDER_REFUNDED
+                    - EMAIL_ORDER_SHIPPED
+                    - EMAIL_ORDER_VAT_INVOICE
+                    - GDPR_DELETED
+                    - GENERIC_EVENT
+                    - INVOICE_CREATED
+                    - INVOICE_REGENERATED
+                    - ITEM_CANCELLED
+                    - ITEM_CANCEL_FAILED
+                    - ITEM_CANCEL_PENDING
+                    - ITEM_CREATED
+                    - ITEM_CREATED_WITH_HOLD
+                    - ITEM_FAILED_RESUBMIT_TO_MCP
+                    - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
+                    - ITEM_HOLD_FAILED
+                    - ITEM_IN_FULFILLMENT
+                    - ITEM_REFUND
+                    - ITEM_REFUNDED
+                    - ITEM_REFUND_FAILED
+                    - ITEM_REFUND_REQUESTED
+                    - ITEM_REPLACEMENT_REQUESTED
+                    - ITEM_RESUBMITTED_TO_MCP
+                    - ORDER_CREATED
+                    - ORDER_PAID
+                    - ORDER_RESUBMIT_REQUESTED
+                    - PROMISED_ARRIVAL_DATE
+                    - REJECTED_ITEM
+                    - SHIPMENT
+                    - SHIPPING_ADDRESS_UPDATE_FAILED
+                    - SHIPPING_ADDRESS_UPDATE_SUCCESS
+                    - TOPSHEET_UPDATE
+          security:
+            - auth0: []
+            - JWT: []
+      /journey/{orderNumber}:
+        get:
+          tags:
+            - order-journey-controller
+          summary: Fetches the Order and Event data for the Order Journey UI
+          operationId: getOrderJourneyUsingGET
+          produces:
+            - '*/*'
+          parameters:
+            - name: milestonesToInclude
+              in: query
+              description: Milestones to display, if none provided assumes all milestones should be returned.
+              required: false
+              type: array
+              items:
+                type: string
+                enum:
+                  - ADDRESS_UPDATE
+                  - BILLING_ADDRESS_UPDATE
+                  - DESIGN_DATA_UPDATE
+                  - EMAIL_GENERIC
+                  - EMAIL_ORDER_AWAITING_PAYMENT
+                  - EMAIL_ORDER_CANCELED
+                  - EMAIL_ORDER_CANCEL_FAILED
+                  - EMAIL_ORDER_CANCEL_REQUESTED
+                  - EMAIL_ORDER_CONFIRMATION
+                  - EMAIL_ORDER_REFUNDED
+                  - EMAIL_ORDER_SHIPPED
+                  - EMAIL_ORDER_VAT_INVOICE
+                  - GDPR_DELETED
+                  - GENERIC_EVENT
+                  - INVOICE_CREATED
+                  - INVOICE_REGENERATED
+                  - ITEM_CANCELLED
+                  - ITEM_CANCEL_FAILED
+                  - ITEM_CANCEL_PENDING
+                  - ITEM_CREATED
+                  - ITEM_CREATED_WITH_HOLD
+                  - ITEM_FAILED_RESUBMIT_TO_MCP
+                  - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
+                  - ITEM_HOLD_FAILED
+                  - ITEM_IN_FULFILLMENT
+                  - ITEM_REFUND
+                  - ITEM_REFUNDED
+                  - ITEM_REFUND_FAILED
+                  - ITEM_REFUND_REQUESTED
+                  - ITEM_REPLACEMENT_REQUESTED
+                  - ITEM_RESUBMITTED_TO_MCP
+                  - ORDER_CREATED
+                  - ORDER_PAID
+                  - ORDER_RESUBMIT_REQUESTED
+                  - PROMISED_ARRIVAL_DATE
+                  - REJECTED_ITEM
+                  - SHIPMENT
+                  - SHIPPING_ADDRESS_UPDATE_FAILED
+                  - SHIPPING_ADDRESS_UPDATE_SUCCESS
+                  - TOPSHEET_UPDATE
+              collectionFormat: multi
               enum:
                 - ADDRESS_UPDATE
                 - BILLING_ADDRESS_UPDATE
@@ -90,143 +192,41 @@ paths:
                 - SHIPPING_ADDRESS_UPDATE_FAILED
                 - SHIPPING_ADDRESS_UPDATE_SUCCESS
                 - TOPSHEET_UPDATE
-      security:
-        - auth0: []
-        - JWT: []
-  /journey/{orderNumber}:
-    get:
-      tags:
-        - order-journey-controller
-      summary: Fetches the Order and Event data for the Order Journey UI
-      operationId: getOrderJourneyUsingGET
-      produces:
-        - '*/*'
-      parameters:
-        - name: milestonesToInclude
-          in: query
-          description: Milestones to display, if none provided assumes all milestones should be returned.
-          required: false
-          type: array
-          items:
-            type: string
-            enum:
-              - ADDRESS_UPDATE
-              - BILLING_ADDRESS_UPDATE
-              - DESIGN_DATA_UPDATE
-              - EMAIL_GENERIC
-              - EMAIL_ORDER_AWAITING_PAYMENT
-              - EMAIL_ORDER_CANCELED
-              - EMAIL_ORDER_CANCEL_FAILED
-              - EMAIL_ORDER_CANCEL_REQUESTED
-              - EMAIL_ORDER_CONFIRMATION
-              - EMAIL_ORDER_REFUNDED
-              - EMAIL_ORDER_SHIPPED
-              - EMAIL_ORDER_VAT_INVOICE
-              - GDPR_DELETED
-              - GENERIC_EVENT
-              - INVOICE_CREATED
-              - INVOICE_REGENERATED
-              - ITEM_CANCELLED
-              - ITEM_CANCEL_FAILED
-              - ITEM_CANCEL_PENDING
-              - ITEM_CREATED
-              - ITEM_CREATED_WITH_HOLD
-              - ITEM_FAILED_RESUBMIT_TO_MCP
-              - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
-              - ITEM_HOLD_FAILED
-              - ITEM_IN_FULFILLMENT
-              - ITEM_REFUND
-              - ITEM_REFUNDED
-              - ITEM_REFUND_FAILED
-              - ITEM_REFUND_REQUESTED
-              - ITEM_REPLACEMENT_REQUESTED
-              - ITEM_RESUBMITTED_TO_MCP
-              - ORDER_CREATED
-              - ORDER_PAID
-              - ORDER_RESUBMIT_REQUESTED
-              - PROMISED_ARRIVAL_DATE
-              - REJECTED_ITEM
-              - SHIPMENT
-              - SHIPPING_ADDRESS_UPDATE_FAILED
-              - SHIPPING_ADDRESS_UPDATE_SUCCESS
-              - TOPSHEET_UPDATE
-          collectionFormat: multi
-          enum:
-            - ADDRESS_UPDATE
-            - BILLING_ADDRESS_UPDATE
-            - DESIGN_DATA_UPDATE
-            - EMAIL_GENERIC
-            - EMAIL_ORDER_AWAITING_PAYMENT
-            - EMAIL_ORDER_CANCELED
-            - EMAIL_ORDER_CANCEL_FAILED
-            - EMAIL_ORDER_CANCEL_REQUESTED
-            - EMAIL_ORDER_CONFIRMATION
-            - EMAIL_ORDER_REFUNDED
-            - EMAIL_ORDER_SHIPPED
-            - EMAIL_ORDER_VAT_INVOICE
-            - GDPR_DELETED
-            - GENERIC_EVENT
-            - INVOICE_CREATED
-            - INVOICE_REGENERATED
-            - ITEM_CANCELLED
-            - ITEM_CANCEL_FAILED
-            - ITEM_CANCEL_PENDING
-            - ITEM_CREATED
-            - ITEM_CREATED_WITH_HOLD
-            - ITEM_FAILED_RESUBMIT_TO_MCP
-            - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
-            - ITEM_HOLD_FAILED
-            - ITEM_IN_FULFILLMENT
-            - ITEM_REFUND
-            - ITEM_REFUNDED
-            - ITEM_REFUND_FAILED
-            - ITEM_REFUND_REQUESTED
-            - ITEM_REPLACEMENT_REQUESTED
-            - ITEM_RESUBMITTED_TO_MCP
-            - ORDER_CREATED
-            - ORDER_PAID
-            - ORDER_RESUBMIT_REQUESTED
-            - PROMISED_ARRIVAL_DATE
-            - REJECTED_ITEM
-            - SHIPMENT
-            - SHIPPING_ADDRESS_UPDATE_FAILED
-            - SHIPPING_ADDRESS_UPDATE_SUCCESS
-            - TOPSHEET_UPDATE
-        - name: orderNumber
-          in: path
-          description: The Order Number
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/OrderMilestones'
-      security:
-        - auth0: []
-        - JWT: []
-  /journey/{orderNumber}/events:
-    get:
-      tags:
-        - order-journey-controller
-      summary: Fetches Event data for the Order Journey UI and treats them as milestones
-      operationId: getEventJourneyUsingGET
-      produces:
-        - '*/*'
-      parameters:
-        - name: orderNumber
-          in: path
-          description: The Order Number
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/OrderMilestones'
-      security:
-        - auth0: []
-        - JWT: []
+            - name: orderNumber
+              in: path
+              description: The Order Number
+              required: true
+              type: string
+          responses:
+            '200':
+              description: OK
+              schema:
+                $ref: '#/definitions/OrderMilestones'
+          security:
+            - auth0: []
+            - JWT: []
+      /journey/{orderNumber}/events:
+        get:
+          tags:
+            - order-journey-controller
+          summary: Fetches Event data for the Order Journey UI and treats them as milestones
+          operationId: getEventJourneyUsingGET
+          produces:
+            - '*/*'
+          parameters:
+            - name: orderNumber
+              in: path
+              description: The Order Number
+              required: true
+              type: string
+          responses:
+            '200':
+              description: OK
+              schema:
+                $ref: '#/definitions/OrderMilestones'
+          security:
+            - auth0: []
+            - JWT: []
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
