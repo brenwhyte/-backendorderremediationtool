@@ -1,156 +1,36 @@
-apiVersion: backstage.io/v1alpha1
-kind: API
-metadata:
-  name: orderJourney-temp
-  description: Order Journey endpoints
-  tags:
-    - bort
-    - java
-    - rest
-  links:
-    - url: https://gitlab.com/vistaprint-org/order-management/orders/tooling/backendorderremediationtool
-      title: GitLab Repo
-      icon: gitlab
-spec:
-  type: openapi
-  lifecycle: staging
-  owner: LochNess
-  definition: |
-    swagger: '2.0'
-    info:
-      description: Backend service for SORT UI
-      version: '1.0'
-      title: Backend Order Remediation Tool (BORT!)
-      termsOfService: Tier 1
-      contact:
-        name: Order Management Tribe
-        url: https://vistaprint.atlassian.net/wiki/spaces/OMT/overview
-        email: lochnesssquad@vistaprint.com
-    host: bort.eu-west-1-hippogriff-staging.orders.vpsvc.com
-    basePath: /
-    tags:
-      - name: order-journey-controller
-        description: Order Journey Controller
-      - name: resubmission-controller
-        description: Resubmission Controller
-    paths:
-      /journey/milestoneTypes:
-        get:
-          tags:
-            - order-journey-controller
-          summary: Fetch all supported order milestones
-          operationId: getMilestoneTypesUsingGET
-          produces:
-            - '*/*'
-          responses:
-            '200':
-              description: OK
-              schema:
-                type: array
-                items:
-                  type: string
-                  enum:
-                    - ADDRESS_UPDATE
-                    - BILLING_ADDRESS_UPDATE
-                    - DESIGN_DATA_UPDATE
-                    - EMAIL_GENERIC
-                    - EMAIL_ORDER_AWAITING_PAYMENT
-                    - EMAIL_ORDER_CANCELED
-                    - EMAIL_ORDER_CANCEL_FAILED
-                    - EMAIL_ORDER_CANCEL_REQUESTED
-                    - EMAIL_ORDER_CONFIRMATION
-                    - EMAIL_ORDER_REFUNDED
-                    - EMAIL_ORDER_SHIPPED
-                    - EMAIL_ORDER_VAT_INVOICE
-                    - GDPR_DELETED
-                    - GENERIC_EVENT
-                    - INVOICE_CREATED
-                    - INVOICE_REGENERATED
-                    - ITEM_CANCELLED
-                    - ITEM_CANCEL_FAILED
-                    - ITEM_CANCEL_PENDING
-                    - ITEM_CREATED
-                    - ITEM_CREATED_WITH_HOLD
-                    - ITEM_FAILED_RESUBMIT_TO_MCP
-                    - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
-                    - ITEM_HOLD_FAILED
-                    - ITEM_IN_FULFILLMENT
-                    - ITEM_REFUND
-                    - ITEM_REFUNDED
-                    - ITEM_REFUND_FAILED
-                    - ITEM_REFUND_REQUESTED
-                    - ITEM_REPLACEMENT_REQUESTED
-                    - ITEM_RESUBMITTED_TO_MCP
-                    - ORDER_CREATED
-                    - ORDER_PAID
-                    - ORDER_RESUBMIT_REQUESTED
-                    - PROMISED_ARRIVAL_DATE
-                    - REJECTED_ITEM
-                    - SHIPMENT
-                    - SHIPPING_ADDRESS_UPDATE_FAILED
-                    - SHIPPING_ADDRESS_UPDATE_SUCCESS
-                    - TOPSHEET_UPDATE
-          security:
-            - auth0: []
-            - JWT: []
-      /journey/{orderNumber}:
-        get:
-          tags:
-            - order-journey-controller
-          summary: Fetches the Order and Event data for the Order Journey UI
-          operationId: getOrderJourneyUsingGET
-          produces:
-            - '*/*'
-          parameters:
-            - name: milestonesToInclude
-              in: query
-              description: Milestones to display, if none provided assumes all milestones should be returned.
-              required: false
-              type: array
-              items:
-                type: string
-                enum:
-                  - ADDRESS_UPDATE
-                  - BILLING_ADDRESS_UPDATE
-                  - DESIGN_DATA_UPDATE
-                  - EMAIL_GENERIC
-                  - EMAIL_ORDER_AWAITING_PAYMENT
-                  - EMAIL_ORDER_CANCELED
-                  - EMAIL_ORDER_CANCEL_FAILED
-                  - EMAIL_ORDER_CANCEL_REQUESTED
-                  - EMAIL_ORDER_CONFIRMATION
-                  - EMAIL_ORDER_REFUNDED
-                  - EMAIL_ORDER_SHIPPED
-                  - EMAIL_ORDER_VAT_INVOICE
-                  - GDPR_DELETED
-                  - GENERIC_EVENT
-                  - INVOICE_CREATED
-                  - INVOICE_REGENERATED
-                  - ITEM_CANCELLED
-                  - ITEM_CANCEL_FAILED
-                  - ITEM_CANCEL_PENDING
-                  - ITEM_CREATED
-                  - ITEM_CREATED_WITH_HOLD
-                  - ITEM_FAILED_RESUBMIT_TO_MCP
-                  - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
-                  - ITEM_HOLD_FAILED
-                  - ITEM_IN_FULFILLMENT
-                  - ITEM_REFUND
-                  - ITEM_REFUNDED
-                  - ITEM_REFUND_FAILED
-                  - ITEM_REFUND_REQUESTED
-                  - ITEM_REPLACEMENT_REQUESTED
-                  - ITEM_RESUBMITTED_TO_MCP
-                  - ORDER_CREATED
-                  - ORDER_PAID
-                  - ORDER_RESUBMIT_REQUESTED
-                  - PROMISED_ARRIVAL_DATE
-                  - REJECTED_ITEM
-                  - SHIPMENT
-                  - SHIPPING_ADDRESS_UPDATE_FAILED
-                  - SHIPPING_ADDRESS_UPDATE_SUCCESS
-                  - TOPSHEET_UPDATE
-              collectionFormat: multi
+swagger: '2.0'
+info:
+  description: Backend service for SORT UI
+  version: '1.0'
+  title: Backend Order Remediation Tool (BORT!)
+  termsOfService: Tier 1
+  contact:
+    name: Order Management Tribe
+    url: https://vistaprint.atlassian.net/wiki/spaces/OMT/overview
+    email: lochnesssquad@vistaprint.com
+host: bort.eu-west-1-hippogriff-staging.orders.vpsvc.com
+basePath: /
+tags:
+  - name: order-journey-controller
+    description: Order Journey Controller
+  - name: resubmission-controller
+    description: Resubmission Controller
+paths:
+  /journey/milestoneTypes:
+    get:
+      tags:
+        - order-journey-controller
+      summary: Fetch all supported order milestones
+      operationId: getMilestoneTypesUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
               enum:
                 - ADDRESS_UPDATE
                 - BILLING_ADDRESS_UPDATE
@@ -192,90 +72,385 @@ spec:
                 - SHIPPING_ADDRESS_UPDATE_FAILED
                 - SHIPPING_ADDRESS_UPDATE_SUCCESS
                 - TOPSHEET_UPDATE
-            - name: orderNumber
-              in: path
-              description: The Order Number
-              required: true
-              type: string
-          responses:
-            '200':
-              description: OK
-              schema:
-                $ref: '#/definitions/OrderMilestones'
-          security:
-            - auth0: []
-            - JWT: []
-      /journey/{orderNumber}/events:
-        get:
-          tags:
-            - order-journey-controller
-          summary: Fetches Event data for the Order Journey UI and treats them as milestones
-          operationId: getEventJourneyUsingGET
-          produces:
-            - '*/*'
-          parameters:
-            - name: orderNumber
-              in: path
-              description: The Order Number
-              required: true
-              type: string
-          responses:
-            '200':
-              description: OK
-              schema:
-                $ref: '#/definitions/OrderMilestones'
-          security:
-            - auth0: []
-            - JWT: []
----
-apiVersion: backstage.io/v1alpha1
-kind: API
-metadata:
-  name: resubmission-temp
-  description: Order resubmission endpoints
-  tags:
-    - bort
-    - java
-    - rest
-  links:
-    - url: https://gitlab.com/vistaprint-org/order-management/orders/tooling/backendorderremediationtool
-      title: GitLab Repo
-      icon: gitlab
-spec:
-  type: openapi
-  lifecycle: staging
-  owner: LochNess
-  definition: |
-    openapi: "3.0.0"
-    info:
-      version: 1.0.0
-      title: BORT
-      license:
-        name: Vista
-    servers:
-      - url: https://bort-staging.orders.vpsvc.com/swagger-ui/#/
-    paths:
-      /resubmit/initiate:
-        post:
-          description: Creates a transaction and fetches order data for requested orders, if they exist.
-      "/resubmit/{transactionId}":
-        post:
-          description: Perform the resubmissions for previously initialized transaction.
-          parameters:
-            - description: The transaction
-              in: path
-              name: transactionId
-              required: true
-              type: string
-      "/resubmit/{transactionId}/refresh":
-        post:
-          description: Refresh the order data for the previously submitted transaction.  Refreshed data will be persisted.
-          parameters:
-            - description: The transaction
-              in: path
-              name: transactionId
-              required: true
-              type: string
-      "/resubmit/remediationHistory":
-        get:
-          description: Fetch all transactions associated with a given canonicalId.
+      security:
+        - auth0: []
+        - JWT: []
+  /journey/{orderNumber}:
+    get:
+      tags:
+        - order-journey-controller
+      summary: Fetches the Order and Event data for the Order Journey UI
+      operationId: getOrderJourneyUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: milestonesToInclude
+          in: query
+          description: Milestones to display, if none provided assumes all milestones should be returned.
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - ADDRESS_UPDATE
+              - BILLING_ADDRESS_UPDATE
+              - DESIGN_DATA_UPDATE
+              - EMAIL_GENERIC
+              - EMAIL_ORDER_AWAITING_PAYMENT
+              - EMAIL_ORDER_CANCELED
+              - EMAIL_ORDER_CANCEL_FAILED
+              - EMAIL_ORDER_CANCEL_REQUESTED
+              - EMAIL_ORDER_CONFIRMATION
+              - EMAIL_ORDER_REFUNDED
+              - EMAIL_ORDER_SHIPPED
+              - EMAIL_ORDER_VAT_INVOICE
+              - GDPR_DELETED
+              - GENERIC_EVENT
+              - INVOICE_CREATED
+              - INVOICE_REGENERATED
+              - ITEM_CANCELLED
+              - ITEM_CANCEL_FAILED
+              - ITEM_CANCEL_PENDING
+              - ITEM_CREATED
+              - ITEM_CREATED_WITH_HOLD
+              - ITEM_FAILED_RESUBMIT_TO_MCP
+              - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
+              - ITEM_HOLD_FAILED
+              - ITEM_IN_FULFILLMENT
+              - ITEM_REFUND
+              - ITEM_REFUNDED
+              - ITEM_REFUND_FAILED
+              - ITEM_REFUND_REQUESTED
+              - ITEM_REPLACEMENT_REQUESTED
+              - ITEM_RESUBMITTED_TO_MCP
+              - ORDER_CREATED
+              - ORDER_PAID
+              - ORDER_RESUBMIT_REQUESTED
+              - PROMISED_ARRIVAL_DATE
+              - REJECTED_ITEM
+              - SHIPMENT
+              - SHIPPING_ADDRESS_UPDATE_FAILED
+              - SHIPPING_ADDRESS_UPDATE_SUCCESS
+              - TOPSHEET_UPDATE
+          collectionFormat: multi
+          enum:
+            - ADDRESS_UPDATE
+            - BILLING_ADDRESS_UPDATE
+            - DESIGN_DATA_UPDATE
+            - EMAIL_GENERIC
+            - EMAIL_ORDER_AWAITING_PAYMENT
+            - EMAIL_ORDER_CANCELED
+            - EMAIL_ORDER_CANCEL_FAILED
+            - EMAIL_ORDER_CANCEL_REQUESTED
+            - EMAIL_ORDER_CONFIRMATION
+            - EMAIL_ORDER_REFUNDED
+            - EMAIL_ORDER_SHIPPED
+            - EMAIL_ORDER_VAT_INVOICE
+            - GDPR_DELETED
+            - GENERIC_EVENT
+            - INVOICE_CREATED
+            - INVOICE_REGENERATED
+            - ITEM_CANCELLED
+            - ITEM_CANCEL_FAILED
+            - ITEM_CANCEL_PENDING
+            - ITEM_CREATED
+            - ITEM_CREATED_WITH_HOLD
+            - ITEM_FAILED_RESUBMIT_TO_MCP
+            - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
+            - ITEM_HOLD_FAILED
+            - ITEM_IN_FULFILLMENT
+            - ITEM_REFUND
+            - ITEM_REFUNDED
+            - ITEM_REFUND_FAILED
+            - ITEM_REFUND_REQUESTED
+            - ITEM_REPLACEMENT_REQUESTED
+            - ITEM_RESUBMITTED_TO_MCP
+            - ORDER_CREATED
+            - ORDER_PAID
+            - ORDER_RESUBMIT_REQUESTED
+            - PROMISED_ARRIVAL_DATE
+            - REJECTED_ITEM
+            - SHIPMENT
+            - SHIPPING_ADDRESS_UPDATE_FAILED
+            - SHIPPING_ADDRESS_UPDATE_SUCCESS
+            - TOPSHEET_UPDATE
+        - name: orderNumber
+          in: path
+          description: The Order Number
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OrderMilestones'
+      security:
+        - auth0: []
+        - JWT: []
+  /journey/{orderNumber}/events:
+    get:
+      tags:
+        - order-journey-controller
+      summary: Fetches Event data for the Order Journey UI and treats them as milestones
+      operationId: getEventJourneyUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: orderNumber
+          in: path
+          description: The Order Number
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/OrderMilestones'
+      security:
+        - auth0: []
+        - JWT: []
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in: header
+  auth0:
+    type: oauth2
+    authorizationUrl: https://cimpress.auth0.com/authorize
+    flow: implicit
+definitions:
+  Event:
+    type: object
+    properties:
+      dateTime:
+        type: string
+      eventProperties:
+        type: object
+      id:
+        type: string
+      itemInfo:
+        type: array
+        items:
+          $ref: '#/definitions/ItemInfo'
+      orderNumber:
+        type: string
+      shopperId:
+        type: string
+      source:
+        type: string
+      type:
+        type: string
+      version:
+        type: integer
+        format: int32
+    title: Event
+  ItemInfo:
+    type: object
+    properties:
+      itemId:
+        type: string
+      itemProperties:
+        type: object
+      quantity:
+        type: integer
+        format: int64
+    title: ItemInfo
+  LineItemData:
+    type: object
+    properties:
+      currentMcpState:
+        type: string
+      currentStates:
+        type: array
+        items:
+          $ref: '#/definitions/LineItemStateQuantity'
+      lineItemId:
+        type: string
+      productName:
+        type: string
+      quantity:
+        type: integer
+        format: int64
+      resubmittableItem:
+        type: boolean
+    title: LineItemData
+  LineItemStateQuantity:
+    type: object
+    properties:
+      quantity:
+        type: integer
+        format: int64
+      state:
+        type: string
+        enum:
+          - CancelFailed
+          - CancelRequested
+          - CancelSuccess
+          - FailedItem
+          - Initial
+          - Rejected
+          - SentToMCP
+          - Shipped
+    title: LineItemStateQuantity
+  Milestone:
+    type: object
+    properties:
+      end:
+        type: string
+      events:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+      group:
+        type: string
+      id:
+        type: string
+      milestoneDisplayType:
+        type: string
+        enum:
+          - INSTANCE
+          - LONG_RUNNING
+      milestoneType:
+        type: string
+        enum:
+          - ADDRESS_UPDATE
+          - BILLING_ADDRESS_UPDATE
+          - DESIGN_DATA_UPDATE
+          - EMAIL_GENERIC
+          - EMAIL_ORDER_AWAITING_PAYMENT
+          - EMAIL_ORDER_CANCELED
+          - EMAIL_ORDER_CANCEL_FAILED
+          - EMAIL_ORDER_CANCEL_REQUESTED
+          - EMAIL_ORDER_CONFIRMATION
+          - EMAIL_ORDER_REFUNDED
+          - EMAIL_ORDER_SHIPPED
+          - EMAIL_ORDER_VAT_INVOICE
+          - GDPR_DELETED
+          - GENERIC_EVENT
+          - INVOICE_CREATED
+          - INVOICE_REGENERATED
+          - ITEM_CANCELLED
+          - ITEM_CANCEL_FAILED
+          - ITEM_CANCEL_PENDING
+          - ITEM_CREATED
+          - ITEM_CREATED_WITH_HOLD
+          - ITEM_FAILED_RESUBMIT_TO_MCP
+          - ITEM_FAILED_TO_SEND_TO_FULFILLMENT
+          - ITEM_HOLD_FAILED
+          - ITEM_IN_FULFILLMENT
+          - ITEM_REFUND
+          - ITEM_REFUNDED
+          - ITEM_REFUND_FAILED
+          - ITEM_REFUND_REQUESTED
+          - ITEM_REPLACEMENT_REQUESTED
+          - ITEM_RESUBMITTED_TO_MCP
+          - ORDER_CREATED
+          - ORDER_PAID
+          - ORDER_RESUBMIT_REQUESTED
+          - PROMISED_ARRIVAL_DATE
+          - REJECTED_ITEM
+          - SHIPMENT
+          - SHIPPING_ADDRESS_UPDATE_FAILED
+          - SHIPPING_ADDRESS_UPDATE_SUCCESS
+          - TOPSHEET_UPDATE
+      start:
+        type: string
+      title:
+        type: string
+    title: Milestone
+  MilestoneGroup:
+    type: object
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      livePreviewUrl:
+        type: string
+      milestoneGroupType:
+        type: string
+        enum:
+          - LINE_ITEM
+          - ORDER
+    title: MilestoneGroup
+  OrderDataToResubmit:
+    type: object
+    properties:
+      error:
+        $ref: '#/definitions/RemediationError'
+      lineItems:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/LineItemData'
+      orderNumber:
+        type: string
+      remediationReason:
+        type: string
+      resubmittableOrder:
+        type: boolean
+      transactionId:
+        type: string
+    title: OrderDataToResubmit
+  OrderMilestones:
+    type: object
+    properties:
+      groups:
+        type: array
+        items:
+          $ref: '#/definitions/MilestoneGroup'
+      milestones:
+        type: array
+        items:
+          $ref: '#/definitions/Milestone'
+    title: OrderMilestones
+  OrderResubmissionResult:
+    type: object
+    properties:
+      orderData:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/OrderDataToResubmit'
+      resubmitRequests:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ResubmitRequest'
+      transactionId:
+        type: string
+    title: OrderResubmissionResult
+  RemediationError:
+    type: object
+    properties:
+      message:
+        type: string
+    title: RemediationError
+  ResubmitRequest:
+    type: object
+    properties:
+      orderNumber:
+        type: string
+      remediationReason:
+        type: string
+    title: ResubmitRequest
+  Transaction:
+    type: object
+    properties:
+      createdDate:
+        type: string
+      requestedOrders:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/ResubmitRequest'
+      requesterCanonicalId:
+        type: string
+      transactionId:
+        type: string
+      transactionType:
+        type: string
+        enum:
+          - Replacement
+          - Resubmit
+    title: Transaction
