@@ -1,0 +1,100 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: orderJourney-temp
+  description: Order Journey endpoints
+  tags:
+    - bort
+    - java
+    - rest
+  links:
+    - url: https://gitlab.com/vistaprint-org/order-management/orders/tooling/backendorderremediationtool
+      title: GitLab Repo
+      icon: gitlab
+spec:
+  type: openapi
+  lifecycle: staging
+  owner: LochNess
+  definition: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: BORT
+      license:
+        name: Vista
+    servers:
+      - url: https://bort-staging.orders.vpsvc.com/swagger-ui/#/
+    paths:
+      "/journey/{orderNumber}":
+        get:
+          description: Fetches the Order and Event data for the Order Journey UI.
+          parameters:
+            - description: The order number for the order to retrieve.
+              in: path
+              name: orderNumber
+              required: true
+              type: string
+      "/journey/{orderNumber}/events":
+        get:
+          description: Fetches Event data for the Order Journey UI and treats them as milestones.
+          parameters:
+            - description: The order number for the order to retrieve.
+              in: path
+              name: orderNumber
+              required: true
+              type: string
+      /journey/milestoneTypes:
+        get:
+          description: Fetch all supported order milestones.
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: resubmission-temp
+  description: Order resubmission endpoints
+  tags:
+    - bort
+    - java
+    - rest
+  links:
+    - url: https://gitlab.com/vistaprint-org/order-management/orders/tooling/backendorderremediationtool
+      title: GitLab Repo
+      icon: gitlab
+spec:
+  type: openapi
+  lifecycle: staging
+  owner: LochNess
+  definition: |
+    openapi: "3.0.0"
+    info:
+      version: 1.0.0
+      title: BORT
+      license:
+        name: Vista
+    servers:
+      - url: https://bort-staging.orders.vpsvc.com/swagger-ui/#/
+    paths:
+      /resubmit/initiate:
+        post:
+          description: Creates a transaction and fetches order data for requested orders, if they exist.
+      "/resubmit/{transactionId}":
+        post:
+          description: Perform the resubmissions for previously initialized transaction.
+          parameters:
+            - description: The transaction
+              in: path
+              name: transactionId
+              required: true
+              type: string
+      "/resubmit/{transactionId}/refresh":
+        post:
+          description: Refresh the order data for the previously submitted transaction.  Refreshed data will be persisted.
+          parameters:
+            - description: The transaction
+              in: path
+              name: transactionId
+              required: true
+              type: string
+      "/resubmit/remediationHistory":
+        get:
+          description: Fetch all transactions associated with a given canonicalId.
