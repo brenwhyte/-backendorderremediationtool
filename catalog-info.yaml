@@ -31,7 +31,7 @@ spec:
   lifecycle: staging
   owner: LochNess
   definition: |
-      swagger: '2.0'
+    swagger: '2.0'
     info:
       description: Backend service for SORT UI
       version: '1.0'
